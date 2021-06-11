@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import time
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -131,3 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'root')
 
 # Set User Model
 AUTH_USER_MODEL = 'user_manage.User'
+
+# System Parameters
+FIRST_BOOKING = time(hour=7)
+LAST_BOOKING = time(hour=8)

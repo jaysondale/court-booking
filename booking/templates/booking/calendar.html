@@ -2,6 +2,26 @@
 
 
 {% block content %}
-Calendar View
+<div class="container-fluid">
+	<!-- Date Navigation -->
+	<div class="row">
+		<p>[Date Navigation]</p>
+	</div>
+	<!-- Calendar Header -->
+	<div class="row flex-row flex-nowrap">
+		<div class="col">&nbsp;</div>
+		{% for court in courts %}
+		<div class="col">
+			<h2>{{court}}</h2>
+		</div>
+		{% endfor %}
+	</div>
+	<!-- Calendar Content -->
+	{% for court in courts %}
+		{% for timeslot in timeslots %}
+			
+		{% endfor %}
+	{% endfor %}
+</div>
 
 {% endblock %}

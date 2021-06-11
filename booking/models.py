@@ -1,11 +1,12 @@
 from django.db import models
 from django.conf import settings
+from datetime import datetime
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL')
 
 # Booking object model
 class Booking(models.Model):
-	startTime = models.DateTimeField()
+	startDateTime = models.DateTimeField(null=True)
 	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
 	court = models.ForeignKey('Court', on_delete=models.CASCADE)
 
@@ -20,9 +21,14 @@ class Booking(models.Model):
 		return self.court
 
 # Club event model
-class Event(Booking):
+class Event(models.Model):
+	firstDay = models.DateField(null=True)
+	lastDay = models.DateField(null=True)
+	startTime = models.TimeField(null=True)
 	periods = models.IntegerField()
 	name = models.CharField(max_length=120)
+	court = models.ForeignKey('Court', on_delete=models.CASCADE)
+
 
 	# Getter methods
 	def get_periods(self):
@@ -35,5 +41,5 @@ class Event(Booking):
 class Court(models.Model):
 	name = models.CharField(max_length=120)
 
-	def get_name(self):
+	def __str__(self):
 		return self.name
