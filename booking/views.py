@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.template.defaulttags import register
 from datetime import datetime, timedelta, date, time
+from django.utils import timezone
+import pytz
 from .models import Booking, Court, Event
 from django.conf import settings
 
@@ -20,9 +23,16 @@ def calendarView(request):
 
 	# 2) Compute number of time slots available
 	timeslots = []
-	today = date.today()
-	time_cursor = datetime.combine(today, FIRST_BOOKING)
-	LAST_BOOKING_DATETIME = datetime.combine(today, LAST_BOOKING) # convert to datetime for comparison
+	today = date.today() # TODO: UPDATE SO THIS IS A PARAMETER
+	time_cursor_native = datetime.combine(today, FIRST_BOOKING)
+	LAST_BOOKING_DATETIME_native = datetime.combine(today, LAST_BOOKING) # convert to datetime for comparison
+
+	# Convert to timezone-sensitive
+	timezone = pytz.timezone("America/New_York")
+
+	time_cursor = timezone.localize(time_cursor_native)
+	LAST_BOOKING_DATETIME = timezone.localize(LAST_BOOKING_DATETIME_native)
+
 	while(time_cursor <= LAST_BOOKING_DATETIME):
 		timeslots.append(time_cursor)
 		time_cursor = time_cursor + timedelta(hours=1)
@@ -32,26 +42,35 @@ def calendarView(request):
 	booking_states = {}
 
 	# Get today's bookings & events
-	today_min = datetime.combine(today, time.min)
-	today_max = datetime.combine(today, time.max)
+	today_min_native = datetime.combine(today, time.min)
+	today_min = timezone.localize(today_min_native)
+	today_max_native = datetime.combine(today, time.max)
+	today_max = timezone.localize(today_max_native)
+
 	bookings_today = Booking.objects.filter(startDateTime__gte=today_min, startDateTime__lte=today_max)
-	events_today = Event.objects.filter(firstDay__lte=today, lastDay__gte=today)
+	# Filter events ocurring today
+	events_today = Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=today.weekday())
 
 	# Get courts
 	courts = Court.objects.all()
-
 	# Iterate through time slots, bookings, events
 	for court in courts:
-		bookings_court = bookings_today.filter(court__pk=court.pk)
+		bookings_court = bookings_today.filter(court__id=court.pk)
 		events = events_today.filter(court__pk=court.pk)
+		booking_states[court] = {}
 		for timeslot in timeslots:
-			bookings = bookings_court.filter(startDateTime__e=timeslot)
+			booking = bookings_court.filter(startDateTime=timeslot)
+			#print(bookings_court.get().startDateTime)
+			if booking:
+				booking_states[court][timeslot] = booking.get()
 
 
 
 
 	context = {
 		'now': datetime.now(),
-		'courts': Court.objects.all()
+		'courts': Court.objects.all(),
+		'timeslots': timeslots,
+		'booking_states': booking_states
 	}
 	return render(request, 'booking/calendar.html', context)
