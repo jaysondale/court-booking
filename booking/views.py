@@ -66,11 +66,11 @@ def calendarView(request):
 
 
 
-
+	print(request.user.is_authenticated)
 	context = {
 		'now': datetime.now(),
 		'courts': Court.objects.all(),
 		'timeslots': timeslots,
-		'booking_states': booking_states
+		'booking_states': booking_states,
 	}
 	return render(request, 'booking/calendar.html', context)
