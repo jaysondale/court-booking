@@ -80,7 +80,7 @@ def calendarView(request):
 
 
 
-
+	print(request.user.is_authenticated)
 	context = {
 		'now': datetime.now(),
 		'courts': Court.objects.all(),

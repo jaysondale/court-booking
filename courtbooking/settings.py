@@ -136,3 +136,9 @@ AUTH_USER_MODEL = 'user_manage.User'
 # System Parameters
 FIRST_BOOKING = time(hour=7)
 LAST_BOOKING = time(hour=20)
+
+#Login redirect
+LOGIN_REDIRECT_URL='calendar'
+
+#Backend for email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
