@@ -49,19 +49,33 @@ def calendarView(request):
 
 	bookings_today = Booking.objects.filter(startDateTime__gte=today_min, startDateTime__lte=today_max)
 	# Filter events ocurring today
-	events_today = Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=today.weekday())
+	events_today = Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=(today.weekday()+2)%7)
 
 	# Get courts
 	courts = Court.objects.all()
 	# Iterate through time slots, bookings, events
 	for court in courts:
 		bookings_court = bookings_today.filter(court__id=court.pk)
-		events = events_today.filter(court__pk=court.pk)
+		events = events_today.filter(court__id=court.pk)
+		#print(events)
 		booking_states[court] = {}
 		for timeslot in timeslots:
+
 			booking = bookings_court.filter(startDateTime=timeslot)
+
+			# Get events that start now or before the timeslot
+			events_filtered = events.filter(startTime__lte=timeslot.time())
+			# Iterate through events and check number of periods
+			event = None # Assuming only one event will fit this criteria
+			for event_i in events_filtered:
+				endtime = datetime.combine(today, event_i.startTime) + timedelta(hours=event_i.periods)
+				if timeslot.time() < endtime.time():
+					event = event_i
+			#print(event)
 			#print(bookings_court.get().startDateTime)
-			if booking:
+			if event:
+				booking_states[court][timeslot] = event
+			elif booking:
 				booking_states[court][timeslot] = booking.get()
 
 
@@ -71,6 +85,7 @@ def calendarView(request):
 		'now': datetime.now(),
 		'courts': Court.objects.all(),
 		'timeslots': timeslots,
+		'title': 'Book a Court',
 		'booking_states': booking_states
 	}
 	return render(request, 'booking/calendar.html', context)

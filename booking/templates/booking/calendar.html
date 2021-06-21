@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'booking/calendar.css' %}">
+{% endblock %}
+
 {% load get_item %}
 {% load tz %}
 
@@ -15,30 +21,32 @@
 		
 	</div>
 	<!-- Calendar Content -->
-	<table>
-		<thead>
-			<tr>
-				<th>Time</th>
-				{% for court in courts %}
-				<th>{{court}}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-		{% for timeslot in timeslots %}
-			<tr>
-				{% timezone "America/New_York" %}
-				<td>{{timeslot|date:"g:i a"}}</td>
-				{% for court in courts %}
-					{% autoescape off %}
-					<td>{{booking_states|get_court:court|get_time:timeslot}}</td>
-					{% endautoescape %}
-				{% endfor %}
-				{% endtimezone %}
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-bordered header-fixed">
+			<thead>
+				<tr>
+					<th>Time</th>
+					{% for court in courts %}
+					<th>{{court}}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+			{% for timeslot in timeslots %}
+				<tr>
+					{% timezone "America/New_York" %}
+					<th><h4>{{timeslot|date:"g:i a"}} -</h4><p class="mb-0">{{timeslot|get_next_hour|date:"g:i a"}}</p></th>
+					{% for court in courts %}
+						{% autoescape off %}
+						<td>{{booking_states|get_court:court|get_time:timeslot}}</td>
+						{% endautoescape %}
+					{% endfor %}
+					{% endtimezone %}
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 {% endblock %}

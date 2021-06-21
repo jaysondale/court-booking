@@ -1,0 +1,46 @@
+div.container {
+	overflow: scroll;
+}
+
+thead th {
+	position: -webkit-sticky; /* for Safari */
+	position: sticky;
+	top: 0;
+	background-color: white;
+	z-index: 999;
+}
+
+tbody th {
+	position: -webkit-sticky;
+	position: sticky;
+	left: 0;
+	min-width: 180px;
+	background-color: lightgrey;
+}
+
+.table td {
+	padding: 2px;
+}
+
+.table button {
+	min-height: 80px;
+	min-width: 150px;
+	width: 100%;
+}
+
+.table .available {
+	background-color: lightgreen;
+}
+
+thead th:first-child {
+	left: 0;
+	z-index: 1000;
+}
+
+.event {
+	background-color: #ebba34;
+}
+
+.member {
+	background-color: #d1d1d1;
+}
