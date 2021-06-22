@@ -5,6 +5,8 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email")
+        help_texts = {"email": "This field is required",
+                      }
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:

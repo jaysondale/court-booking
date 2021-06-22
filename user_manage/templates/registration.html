@@ -18,7 +18,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
@@ -45,7 +45,8 @@
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            <form class="login100-form validate-form" method="post" action="">
+            <form class="login100-form validate-form" method="post" action="{% url 'register' %}">
+                {% csrf_token %}
 					<span class="login100-form-title p-b-26">
 						Welcome
 					</span>
@@ -54,18 +55,20 @@
 					</span>
 
                 {% for field in form %}
-
-                <div class="wrap-input100 validate-input" data-validate = "{{ field.errors }}">
-                    <input class="input100" type="{{ field.widget_type }}" name=" {{ field.html_name }} ">
-                    <span class="focus-input100" data-placeholder="{{ field.label }}"></span>
-                </div>
-
+                    {% if field.help_text %}
+                    <div class="wrap-input100 validate-input" data-validate = "{{ field.help_text|striptags }}" >
+                    {% else %}
+                    <div class="wrap-input100">
+                    {% endif %}
+                        <input class="input100" id="{{ field.id_for_label }}" type="{{ field.widget_type }}" name="{{ field.html_name }}">
+                        <span class="focus-input100" data-placeholder="{{ field.label }}"></span>
+                    </div>
                 {% endfor %}
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
-                        <button class="login100-form-btn">
+                        <button class="login100-form-btn" type="submit" name="Create User">
                             Register
                         </button>
                     </div>
@@ -73,11 +76,11 @@
 
                 <div class="text-center p-t-115">
 						<span class="txt1">
-							Don’t have an account?
+							Already have an account?
 						</span>
 
-                    <a class="txt2" href="#">
-                        Sign Up
+                    <a class="txt2" href="{% url 'login' %}">
+                        Login
                     </a>
                 </div>
             </form>
