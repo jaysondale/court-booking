@@ -16,12 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from booking import views as booking_views
-from user_manage.views import registrarionView
+from user_manage.views import registrationView, profileView
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('calendar/', booking_views.calendarView, name='calendar'),
-    #path('login/', loginView, name='login'),
-    path('registration/', registrarionView, name='register'),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('registration/', registrationView, name='register'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('profile', profileView, name='profile')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
