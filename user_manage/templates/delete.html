@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <form method="POST">
+     {% csrf_token %}
+     <p>Are you sure you want to delete yuor account? {{user.first_name}}</p>
+     <button type="submit" class="btn btn-danger"> delete </button>
+ </form>
+<br><p>No, keep my account</p>
+<a href="{% url 'profile' %}" class="btn btn-outline-primary">Return to site</a>
+
+{% endblock %}

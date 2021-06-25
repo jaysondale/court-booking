@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, ProfileUpdateForm, CustomUserChangeForm
 from django.contrib import messages
+from .models import User
 
 # Create your views here.
 
@@ -45,3 +46,12 @@ def profileView(request):
         'p_form': p_form
     }
     return render(request, 'profile.html', context)
+
+def deleteView(request, pk):
+    obj = get_object_or_404(User, id=pk)
+    if request.method == 'POST':
+        obj.delete()
+    context = {
+        "object": obj
+    }
+    return render(request, "delete.html", context)

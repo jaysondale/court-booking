@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from booking import views as booking_views
-from user_manage.views import registrationView, profileView
+from user_manage.views import registrationView, profileView, deleteView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,7 +26,8 @@ urlpatterns = [
     path('calendar/', booking_views.calendarView, name='calendar'),
     path('registration/', registrationView, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('profile', profileView, name='profile')
+    path('profile/', profileView, name='profile'),
+    path('account/<int:pk>/delete/', deleteView, name='delete')
 ]
 
 if settings.DEBUG:
