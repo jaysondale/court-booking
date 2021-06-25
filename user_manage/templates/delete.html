@@ -4,7 +4,7 @@
 
  <form method="POST">
      {% csrf_token %}
-     <p>Are you sure you want to delete yuor account? {{user.first_name}}</p>
+     <p>Are you sure you want to delete your account? {{user.first_name}}</p>
      <button type="submit" class="btn btn-danger"> delete </button>
  </form>
 <br><p>No, keep my account</p>
