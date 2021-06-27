@@ -2,9 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 
-# Create your views here.
 
-def registrarionView(request):
+def registration_view(request):
     form = CustomUserCreationForm()
 
     if request.method == 'POST':
