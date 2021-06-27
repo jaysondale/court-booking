@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'booking',
-    'user_manage',
+    'user_manage.apps.UserManageConfig',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -129,7 +130,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'root')
 
 
-
 # Set User Model
 AUTH_USER_MODEL = 'user_manage.User'
 
@@ -137,8 +137,12 @@ AUTH_USER_MODEL = 'user_manage.User'
 FIRST_BOOKING = time(hour=7)
 LAST_BOOKING = time(hour=20)
 
-#Login redirect
-LOGIN_REDIRECT_URL='calendar'
+# Login redirect
+LOGIN_REDIRECT_URL='profile'
 
-#Backend for email
+# Backend for email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# A way to access the media of the project
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

@@ -1,38 +1,149 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+<head>
+    <title>Login V2</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/iconic/css/material-design-iconic-font.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/animsition/css/animsition.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/daterangepicker/daterangepicker.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
+</head>
+<body>
 
-    {% if next %}
-        {% if user.is_authenticated %}
-            <p>Your account doesn't have access to this page. To proceed,
-                please login with an account that has access.</p>
-        {% else %}
-            <p>Please login to see this page.</p>
-        {% endif %}
-    {% endif %}
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form" method="post" action="{% url 'login' %}">
+                {%csrf_token%}
+                <span class="login100-form-title p-b-26">
+						Welcome
+					</span>
+                <span class="login100-form-title p-b-48">
+						<i class="zmdi zmdi-font"></i>
+					</span>
+
+                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+                    <tr>
+                        <input class="input100" type="{{ form.ussername.widget_type }}" name="{{ form.username.html_name }}">
+                        <span class="focus-input100" data-placeholder="Email"></span>
+                    </tr>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Enter password">
+                    <tr>
+                        <input class="input100" type="{{ form.password.widget_type }}" name="{{ form.password.html_name }}">
+                        <span class="focus-input100" data-placeholder="Password"></span>
+                    </tr>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button class="login100-form-btn" type="submit" value="login">
+                            Login
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center p-t-115">
+						<span class="txt1">
+							Don’t have an account?
+						</span>
+
+                    <a class="txt2" href="{% url 'register' %}">
+                        Sign Up
+                    </a>
+                    <p></p>
+                        <span class="txt1">
+							Forgot password?
+						</span>
+
+                    <a class="txt2" href="{% url 'password_reset' %}">
+                        Change Password
+                    </a>
+
+            </form>
+        </div>
+    </div>
+</div>
 
 
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-        </table>
-        <input type="submit" value="login" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+<div id="dropDownSelect1"></div>
 
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
+
+<!--    {% if form.errors %}-->
+<!--        <p>Your username and password didn't match. Please try again.</p>-->
+<!--    {% endif %}-->
+
+<!--    {% if next %}-->
+<!--        {% if user.is_authenticated %}-->
+<!--            <p>Your account doesn't have access to this page. To proceed,-->
+<!--                please login with an account that has access.</p>-->
+<!--        {% else %}-->
+<!--            <p>Please login to see this page.</p>-->
+<!--        {% endif %}-->
+<!--    {% endif %}-->
+
+
+<!--    <form method="post" action="{% url 'login' %}">-->
+<!--        {% csrf_token %}-->
+<!--        <table>-->
+<!--            <tr>-->
+<!--                <td>{{ form.username.label_tag }}</td>-->
+<!--                <td>{{ form.username }}</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>{{ form.password.label_tag }}</td>-->
+<!--                <td>{{ form.password }}</td>-->
+<!--            </tr>-->
+<!--        </table>-->
+<!--        <input type="submit" value="login" />-->
+<!--        <input type="hidden" name="next" value="{{ next }}" />-->
+<!--    </form>-->
+
+<!--    {# Assumes you setup the password_reset view in your URLconf #}-->
+<!--    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>-->
 
 {% endblock %}
+
