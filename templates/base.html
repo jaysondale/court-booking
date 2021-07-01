@@ -19,6 +19,8 @@
 	<title>{{ page_title }} - CourtBooking</title>
 
 </head>
+{% load tz %}
+{% timezone "America/New_York" %}
 <body>
 
 {% include 'navbar.html' %}
@@ -55,4 +57,5 @@
 {% block scripts %}
 {% endblock %}
 </body>
+{% endtimezone %}
 </html>

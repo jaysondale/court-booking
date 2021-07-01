@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -138,7 +138,7 @@ FIRST_BOOKING = time(hour=7)
 LAST_BOOKING = time(hour=20)
 
 # Login redirect
-LOGIN_REDIRECT_URL='profile'
+LOGIN_REDIRECT_URL='calendar'
 
 # Backend for email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

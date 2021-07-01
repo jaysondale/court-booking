@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile
+from .models import User
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -23,4 +23,3 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Profile)

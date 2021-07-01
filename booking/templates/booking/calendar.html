@@ -3,22 +3,29 @@
 {% load static %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'booking/calendar.css' %}">
+<link rel="stylesheet" href="{% static 'booking/css/calendar.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var booking_error = "{{booking_error}}";
+</script>
+<script src="{% static 'booking/js/calendar.js' %}"></script>
 {% endblock %}
 
 {% load get_item %}
-{% load tz %}
 
 {% block content %}
 <div class="container-fluid">
 	<!-- Date Navigation -->
-	<div class="row">
-		<p>[Date Navigation]</p>
-	</div>
-	<!-- Calendar Header -->
-	<div class="row flex-row flex-nowrap">
-		<div class="col">&nbsp;</div>
-		
+	<div class="row justify-content-center">
+		{% if current_is_today %}
+		<span>Today</span>
+		{% else %}
+		<a href="{% url 'calendar' previous%}" class="btn btn-outline-secondary">{{previous}}</a>
+		<span>{{current}}</span>
+		{% endif %}
+		<a href="{% url 'calendar' next%}" class="btn btn-outline-secondary">{{next}}</a>
 	</div>
 	<!-- Calendar Content -->
 	<div class="table-responsive">
@@ -34,19 +41,52 @@
 			<tbody>
 			{% for timeslot in timeslots %}
 				<tr>
-					{% timezone "America/New_York" %}
 					<th><h4>{{timeslot|date:"g:i a"}} -</h4><p class="mb-0">{{timeslot|get_next_hour|date:"g:i a"}}</p></th>
 					{% for court in courts %}
 						{% autoescape off %}
 						<td>{{booking_states|get_court:court|get_time:timeslot}}</td>
 						{% endautoescape %}
 					{% endfor %}
-					{% endtimezone %}
 				</tr>
 			{% endfor %}
 			</tbody>
 		</table>
 	</div>
+</div>
+
+<div id="confirm-booking-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Court Booking</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-4">
+        	<div class="col-4 d-flex justify-content-end">
+        		<span class="font-weight-bold">Court:</span>
+        	</div>
+        	<div class='col-6'>
+        		<p id="court-name"></p>
+        	</div>
+        </div>
+        <div class="row mb-4">
+        	<div class="col-4 d-flex justify-content-end">
+        		<span class="font-weight-bold">Time:</span>
+        	</div>
+        	<div class='col-6'>
+        		<p id="booking-time"></p>
+        	</div>
+        </div>
+      <div class="modal-footer">
+      	{% csrf_token %}
+        <button action="{% url 'book' %}" class="btn btn-success modal-action">Confirm</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

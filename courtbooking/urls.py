@@ -1,29 +1,31 @@
-"""courtbooking URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, register_converter
+from datetime import datetime
 from booking import views as booking_views
-from user_manage.views import registrationView, profileView, deleteView
+from user_manage.views import registrationView, profileView, deleteView, defaultView
 from django.conf import settings
 from django.conf.urls.static import static
 
+class DateConverter:
+    regex = '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+
+    def to_python(self, value: str):
+        return datetime.strptime(value, '%Y-%m-%d').date()
+
+    def to_url(self, value: datetime.date):
+        return value.strftime('%Y-%m-%d')
+
+register_converter(DateConverter, 'yyyy')
 
 urlpatterns = [
+    path('', defaultView, name='default'),
     path('admin/', admin.site.urls),
     path('calendar/', booking_views.calendarView, name='calendar'),
+    path('calendar/<yyyy:current_date>/', booking_views.calendarView, name='calendar'),
+    path('calendar/<yyyy:current_date>/<int:booking_error>/', booking_views.calendarView, name='calendar'),
+    path('calendar/book', booking_views.book, name='book'),
+    path('calendar/my-bookings', booking_views.myBookings, name="my-bookings"),
+    path('calendar/delete', booking_views.cancelBooking, name="cancel-booking"),
     path('registration/', registrationView, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('profile/', profileView, name='profile'),

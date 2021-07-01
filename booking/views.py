@@ -1,13 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.defaulttags import register
+from django.http import JsonResponse
 from datetime import datetime, timedelta, date, time
 from django.utils import timezone
 import pytz
 from .models import Booking, Court, Event
 from django.conf import settings
+from .utils import getBookings, getEvents
+from django.db.models import Q
 
 # Create your views here.
-def calendarView(request):
+def calendarView(request, current_date=None, booking_error=0):
+	print(request)
 	'''
 	Method Objectives:
 	1) Gather system parameters - FIRST_BOOKING, LAST_BOOKING
@@ -23,7 +27,7 @@ def calendarView(request):
 
 	# 2) Compute number of time slots available
 	timeslots = []
-	today = date.today() # TODO: UPDATE SO THIS IS A PARAMETER
+	today = current_date if current_date else date.today() # TODO: UPDATE SO THIS IS A PARAMETER
 	time_cursor_native = datetime.combine(today, FIRST_BOOKING)
 	LAST_BOOKING_DATETIME_native = datetime.combine(today, LAST_BOOKING) # convert to datetime for comparison
 
@@ -41,15 +45,8 @@ def calendarView(request):
 	# Initialize dictionary to store states
 	booking_states = {}
 
-	# Get today's bookings & events
-	today_min_native = datetime.combine(today, time.min)
-	today_min = timezone.localize(today_min_native)
-	today_max_native = datetime.combine(today, time.max)
-	today_max = timezone.localize(today_max_native)
-
-	bookings_today = Booking.objects.filter(startDateTime__gte=today_min, startDateTime__lte=today_max)
-	# Filter events ocurring today
-	events_today = Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=(today.weekday()+2)%7)
+	bookings_today = getBookings(today)
+	events_today = getEvents(today)
 
 	# Get courts
 	courts = Court.objects.all()
@@ -79,13 +76,68 @@ def calendarView(request):
 				booking_states[court][timeslot] = booking.get()
 
 
-
-	print(request.user.is_authenticated)
+	# Dates for date navigation
+	next_date = today + timedelta(days=1)
+	previous_date = today - timedelta(days=1)
 	context = {
-		'now': datetime.now(),
 		'courts': Court.objects.all(),
 		'timeslots': timeslots,
-		'title': 'Book a Court',
-		'booking_states': booking_states
+		'page_title': 'Book a Court',
+		'booking_states': booking_states,
+		'current': today,
+		'previous': previous_date,
+		'next': next_date,
+		'current_is_today': today == date.today(),
+		'booking_error': booking_error == 1
 	}
 	return render(request, 'booking/calendar.html', context)
+
+def book(request):
+	if (request.method == "POST"):
+		# Deserialize time
+		time = datetime.fromisoformat(request.POST['time'])
+		court = request.POST['court']
+		court_obj = Court.objects.get(id=court)
+		booking_approved = False
+		if(request.user.is_authenticated):
+			# Validate booking rules met
+			# Check if pickleball-only court has been booked today
+			user_bookings = getBookings(time.date())
+			pb_bookings_filtered = user_bookings.filter(user=request.user, court__isTennis=False)
+			if not pb_bookings_filtered:
+				t_bookings = user_bookings.filter(court__isTennis=True)
+				if not court_obj.isTennis:
+					if not t_bookings:
+						booking_approved = True
+				else:
+					t_bookings_filtered = t_bookings.filter(~Q(startDateTime=time))
+					if not t_bookings_filtered:
+						booking_approved = True
+			if (booking_approved):
+				newBooking = Booking(user=request.user, startDateTime=time, court=court_obj)
+				newBooking.save()
+	booking_error = 0 if booking_approved else 1
+	return JsonResponse({'url': '/calendar/' + datetime.strftime(time.date(),'%Y-%m-%d') + '/' + str(booking_error) + '/'})
+
+def myBookings(request):
+	# Get bookings that are either now or in the future
+	now_native = datetime.now()
+	# Convert to timezone-sensitive
+	timezone = pytz.timezone("UTC")
+	now = timezone.localize(now_native)
+	bookings = Booking.objects.filter(user=request.user, startDateTime__gte=now)
+	context = {
+		'bookings': bookings,
+		'title': 'My Bookings',
+		'cancel_action': '/calendar/delete'
+	}
+	return render(request, 'booking/my_bookings.html', context)
+
+def cancelBooking(request):
+	if (request.method == "POST"):
+		bid = request.POST['bid']
+		booking = Booking.objects.get(id=bid)
+		if (booking.user == request.user):
+			booking.delete()
+			return JsonResponse({'code': 200})
+	return JsonResponse({'code': 400})
