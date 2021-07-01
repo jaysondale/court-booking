@@ -13,3 +13,4 @@ django_heroku
 gunicorn
 django-storages
 boto3
+django-crispy-forms
