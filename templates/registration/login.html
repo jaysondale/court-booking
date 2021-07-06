@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block content %}
-
-<head>
-    <title>Login V2</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block stylesheets %}
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
     <!--===============================================================================================-->
@@ -30,8 +24,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
 </head>
-<body>
-
+{% endblock %}
+{% block content %}
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
