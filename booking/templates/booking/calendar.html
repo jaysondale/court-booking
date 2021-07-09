@@ -18,14 +18,16 @@
 {% block content %}
 <div class="container-fluid">
 	<!-- Date Navigation -->
-	<div class="row justify-content-center">
-		{% if current_is_today %}
-		<span>Today</span>
+	<div class="row date-group">
+		<div class="col">
+		{% for datebtn in datebtns %}
+		{% if datebtn == current %}
+		<a href="{% url 'calendar' datebtn %}" class="btn btn-primary">{{datebtn|date:'D, F j'}}</a>
 		{% else %}
-		<a href="{% url 'calendar' previous%}" class="btn btn-outline-secondary">{{previous}}</a>
-		<span>{{current}}</span>
+		<a href="{% url 'calendar' datebtn %}" class="btn btn-outline-secondary">{{datebtn|date:'D, F j'}}</a>
 		{% endif %}
-		<a href="{% url 'calendar' next%}" class="btn btn-outline-secondary">{{next}}</a>
+		{% endfor %}
+		</div>
 	</div>
 	<!-- Calendar Content -->
 	<div class="table-responsive">

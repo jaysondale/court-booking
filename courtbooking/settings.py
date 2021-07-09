@@ -124,6 +124,7 @@ AUTH_USER_MODEL = 'user_manage.User'
 # System Parameters
 FIRST_BOOKING = time(hour=7)
 LAST_BOOKING = time(hour=20)
+NUM_BOOKING_DAYS = 7
 
 # Login redirect
 LOGIN_REDIRECT_URL='calendar'

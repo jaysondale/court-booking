@@ -44,3 +44,12 @@ thead th:first-child {
 .member {
 	background-color: #d1d1d1;
 }
+
+.date-group.row {
+	display: block;
+	overflow-x: auto;
+	white-space: nowrap;
+  }
+  .date-group.row > .col {
+	display: inline-block;
+  }

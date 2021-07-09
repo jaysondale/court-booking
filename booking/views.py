@@ -24,10 +24,20 @@ def calendarView(request, current_date=None, booking_error=0):
 	# 1) Gather system parameters
 	FIRST_BOOKING = getattr(settings, 'FIRST_BOOKING')
 	LAST_BOOKING = getattr(settings, 'LAST_BOOKING')
+	NUM_BOOKING_DAYS = getattr(settings, 'NUM_BOOKING_DAYS')
 
 	# 2) Compute number of time slots available
 	timeslots = []
-	today = current_date if current_date else date.today() # TODO: UPDATE SO THIS IS A PARAMETER
+	today = date.today()
+	# Date validation
+	last_day = date.today() + timedelta(days=NUM_BOOKING_DAYS - 1)
+	if current_date:
+		if (current_date > last_day):
+			return redirect('calendar', last_day)
+		elif (current_date < date.today()):
+			return redirect('calendar', date.today())
+		else:
+			today = current_date
 	time_cursor_native = datetime.combine(today, FIRST_BOOKING)
 	LAST_BOOKING_DATETIME_native = datetime.combine(today, LAST_BOOKING) # convert to datetime for comparison
 
@@ -77,16 +87,18 @@ def calendarView(request, current_date=None, booking_error=0):
 
 
 	# Dates for date navigation
-	next_date = today + timedelta(days=1)
-	previous_date = today - timedelta(days=1)
+	start = date.today()
+	datebtns = [start]
+	for di in range(1, NUM_BOOKING_DAYS):
+		datebtns.append(start + timedelta(days=di))
+
 	context = {
 		'courts': Court.objects.all(),
 		'timeslots': timeslots,
 		'page_title': 'Book a Court',
 		'booking_states': booking_states,
 		'current': today,
-		'previous': previous_date,
-		'next': next_date,
+		'datebtns': datebtns,
 		'current_is_today': today == date.today(),
 		'booking_error': booking_error == 1
 	}
