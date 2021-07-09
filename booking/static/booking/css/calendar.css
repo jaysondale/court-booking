@@ -14,7 +14,8 @@ tbody th {
 	position: -webkit-sticky;
 	position: sticky;
 	left: 0;
-	min-width: 180px;
+	min-width: 110px;
+	max-width: 110px;
 	background-color: lightgrey;
 }
 
@@ -23,8 +24,8 @@ tbody th {
 }
 
 .table button {
-	min-height: 80px;
-	min-width: 150px;
+	min-height: 65px;
+	min-width: 100px;
 	width: 100%;
 }
 
@@ -49,7 +50,37 @@ thead th:first-child {
 	display: block;
 	overflow-x: auto;
 	white-space: nowrap;
-  }
-  .date-group.row > .col {
+}
+.date-group.row > .col {
 	display: inline-block;
-  }
+}
+
+.timeslot > h4{
+	font-size: 0.95rem;
+}
+
+.timeslot > p {
+	font-size: 0.75rem;
+	font-weight: normal;
+}
+
+@media (min-width: 768px) {
+	tbody th {
+		min-width: 180px;
+		max-width: 180px;
+	}
+	.timeslot > h4{
+		font-size: 1.5rem;
+	}
+
+	.timeslot > p {
+		font-size: 1rem;
+		font-weight: bold;
+	}
+
+	.table button {
+		min-height: 80px;
+		min-width: 150px;
+		width: 100%;
+	}
+}

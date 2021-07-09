@@ -43,7 +43,7 @@
 			<tbody>
 			{% for timeslot in timeslots %}
 				<tr>
-					<th><h4>{{timeslot|date:"g:i a"}} -</h4><p class="mb-0">{{timeslot|get_next_hour|date:"g:i a"}}</p></th>
+					<th class="timeslot"><h4>{{timeslot|date:"g:i a"}}</h4><p class="mb-0">- {{timeslot|get_next_hour|date:"g:i a"}}</p></th>
 					{% for court in courts %}
 						{% autoescape off %}
 						<td>{{booking_states|get_court:court|get_time:timeslot}}</td>
