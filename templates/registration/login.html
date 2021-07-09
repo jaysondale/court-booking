@@ -23,7 +23,30 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
-</head>
+    <style>
+        /*//////////////////////////////////////////////////////////////////
+        [ FONT ]*/
+
+        @font-face {
+        font-family: Poppins-Regular;
+        src: url("{% static 'fonts/poppins/Poppins-Regular.ttf' %}"); 
+        }
+
+        @font-face {
+        font-family: Poppins-Medium;
+        src: url("{% static 'fonts/poppins/Poppins-Medium.ttf' %}"); 
+        }
+
+        @font-face {
+        font-family: Poppins-Bold;
+        src: url("{% static 'fonts/poppins/Poppins-Bold.ttf' %}"); 
+        }
+
+        @font-face {
+        font-family: Poppins-SemiBold;
+        src: url("{% static 'fonts/poppins/Poppins-SemiBold.ttf' %}"); 
+        }
+    </style>
 {% endblock %}
 {% block content %}
 <div class="limiter">
