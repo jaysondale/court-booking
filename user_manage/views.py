@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm, ProfileUpdateForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib import messages
 from .models import User
 
-# Create your views here.
 
 def registrationView(request):
     form = CustomUserCreationForm()
@@ -27,23 +26,16 @@ def profileView(request):
     if request.method == 'POST':
         print('is post')
         u_form = CustomUserChangeForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
+        if u_form.is_valid():
             u_form.save()
-            p_form.save()
-            print('saved')
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
         u_form = CustomUserChangeForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
         print('not valid')
 
     context = {
         'u_form': u_form,
-        'p_form': p_form
     }
     return render(request, 'profile.html', context)
 
@@ -55,3 +47,10 @@ def deleteView(request, pk):
         "object": obj
     }
     return render(request, "delete.html", context)
+
+def defaultView(request):
+    if request.user.is_authenticated:
+        return redirect('calendar')
+    else:
+        return redirect('login')
+

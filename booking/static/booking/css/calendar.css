@@ -1,0 +1,86 @@
+div.container {
+	overflow: scroll;
+}
+
+thead th {
+	position: -webkit-sticky; /* for Safari */
+	position: sticky;
+	top: 0;
+	background-color: white;
+	z-index: 999;
+}
+
+tbody th {
+	position: -webkit-sticky;
+	position: sticky;
+	left: 0;
+	min-width: 110px;
+	max-width: 110px;
+	background-color: lightgrey;
+}
+
+.table td {
+	padding: 2px;
+}
+
+.table button {
+	min-height: 65px;
+	min-width: 100px;
+	width: 100%;
+}
+
+.table .available {
+	background-color: lightgreen;
+}
+
+thead th:first-child {
+	left: 0;
+	z-index: 1000;
+}
+
+.event {
+	background-color: #ebba34;
+}
+
+.member {
+	background-color: #d1d1d1;
+}
+
+.date-group.row {
+	display: block;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+.date-group.row > .col {
+	display: inline-block;
+}
+
+.timeslot > h4{
+	font-size: 0.95rem;
+}
+
+.timeslot > p {
+	font-size: 0.75rem;
+	font-weight: normal;
+}
+
+@media (min-width: 768px) {
+	tbody th {
+		min-width: 180px;
+		max-width: 180px;
+	}
+	.timeslot > h4{
+		font-size: 1.5rem;
+	}
+
+	.timeslot > p {
+		font-size: 1rem;
+		font-weight: bold;
+	}
+
+	.table button {
+		min-height: 80px;
+		min-width: 150px;
+		width: 100%;
+	}
+}

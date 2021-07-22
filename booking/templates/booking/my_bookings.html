@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'booking/css/my_bookings.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'booking/js/my_bookings.js' %}"></script>
+{% endblock %}
+
+{% load get_item %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <h1>My Bookings</h1>
+    </div>
+    <div class="row mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>Court</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% csrf_token %}
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{booking.startDateTime|date:"D M d"}}</td>
+                    <td>{{booking.startDateTime|time:"g:i a"}}</td>
+                    <td>{{booking.court}}</td>
+                    <td><button action="{{cancel_action}}" bid="{{booking.pk}}" class="btn btn-danger cancel-booking">Cancel</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

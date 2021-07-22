@@ -1,0 +1,1 @@
+web: gunicorn courtbooking.wsgi:application --log-file -

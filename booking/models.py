@@ -47,5 +47,8 @@ class Event(models.Model):
 class Court(models.Model):
 	name = models.CharField(max_length=120)
 
+	# Boolean field to determine if tennis booking rules apply
+	isTennis = models.BooleanField(default=False)
+
 	def __str__(self):
 		return self.name

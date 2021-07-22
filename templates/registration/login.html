@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block content %}
-
-<head>
-    <title>Login V2</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block stylesheets %}
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
     <!--===============================================================================================-->
@@ -14,7 +8,7 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/iconic/css/material-design-iconic-font.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
     <!--===============================================================================================-->
@@ -29,9 +23,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
-</head>
-<body>
-
+{% endblock %}
+{% block content %}
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
