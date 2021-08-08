@@ -16,5 +16,5 @@ def getBookings(today):
 	return Booking.objects.filter(startDateTime__gte=today_min, startDateTime__lte=today_max)
 
 def getEvents(today):
-	today_min, today_max = getTodayMinMax(today)
-	return Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=(today.weekday()+2)%7)
+	print(today.weekday())
+	return Event.objects.filter(firstDay__lte=today, lastDay__gte=today, firstDay__week_day=((today.weekday()+1)%7)+1)
