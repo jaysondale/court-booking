@@ -11,6 +11,8 @@ from django.db.models import Q
 
 # Create your views here.
 def calendarView(request, current_date=None, booking_error=0):
+	if not request.user.is_authenticated:
+		return redirect('login')
 	print(request)
 	'''
 	Method Objectives:
