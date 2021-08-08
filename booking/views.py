@@ -119,7 +119,7 @@ def book(request):
 			user_bookings = getBookings(time.date())
 			pb_bookings_filtered = user_bookings.filter(user=request.user, court__isTennis=False)
 			if not pb_bookings_filtered:
-				t_bookings = user_bookings.filter(court__isTennis=True)
+				t_bookings = user_bookings.filter(user=request.user, court__isTennis=True)
 				if not court_obj.isTennis:
 					if not t_bookings:
 						booking_approved = True
