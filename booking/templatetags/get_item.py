@@ -19,7 +19,7 @@ def get_time(dictionary_court, timeslot):
 	else:
 		timezone = pytz.timezone("America/New_York")
 		if (timeslot >= timezone.localize(datetime.now())):
-			return f"<button meta='{timeslot.isoformat()}' time='{timeslot.strftime('%a, %b %d %H:%M %p')}' courtname='{court}' court='{court.pk}' class='btn available'>Book</button>"
+			return f"<button meta='{timeslot.isoformat()}' time='{timeslot.strftime('%a, %b %d %I:%M %p')}' courtname='{court}' court='{court.pk}' class='btn available'>Book</button>"
 		else:
 			return "<button class='btn btn-outline-secondary'>Unavailable</button>"
 
