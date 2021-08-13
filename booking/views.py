@@ -109,29 +109,36 @@ def calendarView(request, current_date=None, booking_error=0):
 def book(request):
 	if (request.method == "POST"):
 		# Deserialize time
-		time = datetime.fromisoformat(request.POST['time'])
+		time_ds = datetime.fromisoformat(request.POST['time'])
 		court = request.POST['court']
 		court_obj = Court.objects.get(id=court)
 		booking_approved = False
 		if(request.user.is_authenticated):
 			# Validate booking rules met
 			# Check if pickleball-only court has been booked today
-			user_bookings = getBookings(time.date())
-			pb_bookings_filtered = user_bookings.filter(user=request.user, court__isTennis=False)
-			if not pb_bookings_filtered:
-				t_bookings = user_bookings.filter(user=request.user, court__isTennis=True)
-				if not court_obj.isTennis:
-					if not t_bookings:
-						booking_approved = True
-				else:
-					t_bookings_filtered = t_bookings.filter(~Q(startDateTime=time))
-					if not t_bookings_filtered:
-						booking_approved = True
+			user_bookings = getBookings(time_ds.date())
+			if (not request.user.is_staff):
+				pb_bookings_filtered = user_bookings.filter(user=request.user, court__isTennis=False)
+				if not pb_bookings_filtered:
+					t_bookings = user_bookings.filter(user=request.user, court__isTennis=True)
+					if not court_obj.isTennis:
+						if not t_bookings:
+							booking_approved = True
+					else:
+						t_bookings_filtered = t_bookings.filter(~Q(startDateTime=time_ds))
+						if not t_bookings_filtered:
+							booking_approved = True
+			else:
+				booking_approved = True
 			if (booking_approved):
-				newBooking = Booking(user=request.user, startDateTime=time, court=court_obj)
-				newBooking.save()
+				# Check to make sure no bookings already exist at that time
+				bookings_court = user_bookings.filter(court__id=court)
+				booking_check = bookings_court.filter(startDateTime=time_ds)
+				if not booking_check:
+					newBooking = Booking(user=request.user, startDateTime=time_ds, court=court_obj)
+					newBooking.save()
 	booking_error = 0 if booking_approved else 1
-	return JsonResponse({'url': '/calendar/' + datetime.strftime(time.date(),'%Y-%m-%d') + '/' + str(booking_error) + '/'})
+	return JsonResponse({'url': '/calendar/' + datetime.strftime(time_ds.date(),'%Y-%m-%d') + '/' + str(booking_error) + '/'})
 
 def myBookings(request):
 	# Get bookings that are either now or in the future
