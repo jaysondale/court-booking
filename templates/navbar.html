@@ -19,7 +19,7 @@
 			<a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
             {%  endif %}
             {% if user.is_staff %}
-			<a class="nav-item nav-link" href="#">Admin</a>
+			<a class="nav-item nav-link" href="{% url 'admin:index' %}">Admin</a>
             {% endif %}
 		</div>
 	</div>
