@@ -162,6 +162,7 @@ else:
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
