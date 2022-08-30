@@ -198,5 +198,5 @@ LOGOUT_REDIRECT_URL = 'login'
 
 django_heroku.settings(locals(), staticfiles=False)
 
-# User session expiry after 5 minutes
-SESSION_COOKIE_AGE = 5 * 60
+# User session expiry after 10 minutes
+SESSION_COOKIE_AGE = 10 * 60

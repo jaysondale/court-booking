@@ -157,8 +157,8 @@ else:
         }
     }
 
-# User session expiry after 5 minutes
-SESSION_COOKIE_AGE = 5 * 60
+# User session expiry after 10 minutes
+SESSION_COOKIE_AGE = 10 * 60
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
